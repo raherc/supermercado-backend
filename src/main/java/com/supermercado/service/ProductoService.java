@@ -5,8 +5,10 @@ import com.supermercado.dto.SucursalDTO;
 import com.supermercado.exception.BadRequestException;
 import com.supermercado.exception.NotFoundExceptionSup;
 import com.supermercado.mapper.Mapper;
+import com.supermercado.model.Categoria;
 import com.supermercado.model.Producto;
 import com.supermercado.model.Sucursal;
+import com.supermercado.repository.CategoriaRepository;
 import com.supermercado.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,6 +21,8 @@ import java.util.List;
 public class ProductoService  implements  IProductoService{
     @Autowired
     private ProductoRepository repository;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     @Override
     public List<ProductoDTO> traerProductos() {
@@ -41,9 +45,19 @@ public class ProductoService  implements  IProductoService{
 
     @Override
     public ProductoDTO crearProducto(ProductoDTO productoDto) {
+        //ahora nos llegara id de categoria en lugar del texto
+
+        Categoria cat = categoriaRepository.findById(productoDto.getIdCategoria()).orElseThrow(
+                ()-> new NotFoundExceptionSup("Categoría no encontrada al insertar producto")
+        );
+
+
+        
+
         var prod = Producto.builder()
                 .nombre(productoDto.getNombre())
-                .categoria(productoDto.getCategoria())
+                //.categoria(productoDto.getCategoria())
+                .categoria(cat)
                 .precio(productoDto.getPrecio())
                 .cantidad(productoDto.getCantidad())
                 .build();
@@ -56,9 +70,14 @@ public class ProductoService  implements  IProductoService{
         //buscar si existe
         Producto prod = repository.findById(id)
                 .orElseThrow(() -> new NotFoundExceptionSup("Producto no encontrado para actualizar"));
+        //volvemos a buscar la categoría que nos llega
+        Categoria cat = categoriaRepository.findById(productoDto.getIdCategoria()).orElseThrow(
+                ()-> new NotFoundExceptionSup("Categoría no encontrada al modificar producto")
+        );
 
         prod.setNombre(productoDto.getNombre());
-        prod.setCategoria(productoDto.getCategoria());
+        //prod.setCategoria(productoDto.getCategoria());
+        prod.setCategoria(cat);
         prod.setCantidad(productoDto.getCantidad());
         prod.setPrecio(productoDto.getPrecio());
 

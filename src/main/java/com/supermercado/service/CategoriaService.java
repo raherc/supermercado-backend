@@ -1,11 +1,13 @@
 package com.supermercado.service;
 
 import com.supermercado.dto.CategoriaDTO;
+import com.supermercado.exception.BadRequestException;
 import com.supermercado.exception.NotFoundExceptionSup;
 import com.supermercado.mapper.Mapper;
 import com.supermercado.model.Categoria;
 import com.supermercado.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,7 +63,16 @@ public class CategoriaService implements  ICategoriaService{
         Categoria cat = repository.findById(id).orElseThrow(
                 ()-> new NotFoundExceptionSup("Categoria a eliminar no existe")
         );
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        }catch (BadRequestException e){
+            throw  new BadRequestException("Error al eliminar categoría "+ e.getMessage());
+
+        }catch (DataIntegrityViolationException e){
+            throw new DataIntegrityViolationException("No se puede elimar categoría para la que existen productos :"+ cat.getNombre());
+        }catch (Exception e){
+            throw new RuntimeException("Error al eliminar categoría "+ e.getMessage(), e);
+        }
 
     }
 }

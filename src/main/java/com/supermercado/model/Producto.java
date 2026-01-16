@@ -17,11 +17,11 @@ public class Producto {
     private String nombre;
     private Double precio;
     //se cambiará para tener referencia a categoria
-    private String categoria;
+   // private String categoriaNombre;
     // Relación unidireccional
-//    @ManyToOne
-//    @JoinColumn(name = "id_categoria", nullable = false)
-//    private Categoria categoria;
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private Categoria categoria;
     private int cantidad;
 
 
