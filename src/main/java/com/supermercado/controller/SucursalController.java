@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/sucursales")
-@CrossOrigin(origins = "http://localhost:4201")
+@CrossOrigin(origins = "*")
 public class SucursalController {
 
     @Autowired

@@ -11,7 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categorias") // Endpoint actualizado
-@CrossOrigin(origins = "http://localhost:4201")
+//@CrossOrigin(origins = "http://localhost:4201")
+@CrossOrigin(origins = "*")
 public class CategoriaController {
 
     @Autowired
