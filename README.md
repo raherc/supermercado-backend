@@ -1,3 +1,6 @@
+
+Visualizar desde : https://supermercado-frontend-dmyv.onrender.com
+Se debe esperar sobre 1 minuto para que Render despierte la base de datos:
 # Supermarket App 🛒
 
 Aplicación de supermercado desarrollada con **Spring Boot** como proyecto de práctica y aprendizaje.
